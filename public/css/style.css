@@ -405,6 +405,11 @@ input {
     border: 1px solid rgba(255, 255, 255, 0);
 }
 
+    .entry.selected.starred,
+    .entry.starred {
+        background:rgba(255, 255, 204, 0.4);
+    }
+
     .entry.selected.unread,
     .entry.unread {
         margin-left: 3px;
