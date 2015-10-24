@@ -13,6 +13,7 @@ user.js
 /_bin/*.*
 /_docs/website/forum
 config.ini
+config.php
 .project
 node_modules
 _wiki

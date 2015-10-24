@@ -148,7 +148,7 @@ class View {
      */
     public function genMinifiedJsAndCss() {
         // minify js
-        $targetJs = \F3::get('BASEDIR').'/public/'.self::getGlobalJsFileName();
+        $targetJs = \F3::get('WEBDIR').'/public/'.self::getGlobalJsFileName();
         if(!file_exists($targetJs) || \F3::get('DEBUG')!=0) {
             $js = "";
             foreach(\F3::get('js') as $file)
@@ -157,7 +157,7 @@ class View {
         }
     
         // minify css
-        $targetCss = \F3::get('BASEDIR').'/public/'.self::getGlobalCssFileName();
+        $targetCss = \F3::get('WEBDIR').'/public/'.self::getGlobalCssFileName();
         if(!file_exists($targetCss) || \F3::get('DEBUG')!=0) {
             $css = "";
             foreach(\F3::get('css') as $file)

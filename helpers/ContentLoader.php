@@ -47,8 +47,7 @@ class ContentLoader {
         }
         $this->cleanup();
     }
-    
-    
+
     /**
      * updates a given source
      * returns an error or true on success
@@ -270,7 +269,7 @@ class ContentLoader {
             $thumbnailAsJpg = $imageHelper->loadImage($thumbnail, $extension, 500, 500);
             if ($thumbnailAsJpg !== false) {
                 file_put_contents(
-                    'data/thumbnails/' . md5($thumbnail) . '.' . $extension,
+                    \F3::get('THUMB_DIR').'/' . md5($thumbnail) . '.' . $extension,
                     $thumbnailAsJpg
                 );
                 $newItem['thumbnail'] = md5($thumbnail) . '.' . $extension;
@@ -304,7 +303,7 @@ class ContentLoader {
                 $iconAsPng = $imageHelper->loadImage($icon, $extension, 30, null);
                 if($iconAsPng!==false) {
                     file_put_contents(
-                        'data/favicons/' . md5($icon) . '.' . $extension,
+                        \F3::get('FAVICON_DIR').'/' . md5($icon) . '.' . $extension,
                         $iconAsPng
                     );
                     $newItem['icon'] = md5($icon) . '.' . $extension;
@@ -359,10 +358,10 @@ class ContentLoader {
         \F3::set('im', $this->itemsDao);
         if($type=='thumbnails') {
             $checker = function($file) { return \F3::get('im')->hasThumbnail($file);};
-            $itemPath = 'data/thumbnails/';
+            $itemPath = \F3::get('THUMB_DIR') . '/';
         } else if($type=='icons') {
             $checker = function($file) { return \F3::get('im')->hasIcon($file);};
-            $itemPath = 'data/favicons/';
+            $itemPath = \F3::get('FAVICON_DIR') . '/';
         }
         
         foreach(scandir($itemPath) as $file) {

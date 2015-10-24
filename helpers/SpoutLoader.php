@@ -78,14 +78,14 @@ class SpoutLoader {
     protected function loadClass($location, $parentclass) {
         $return = array();
         
-        foreach(scandir($location) as $dir) {
-            if(is_dir($location . '/' . $dir) && substr($dir,0,1)!=".") {
+        foreach(scandir(\F3::get('APP_ROOT') . '/' . $location) as $dir) {
+            if(is_dir(\F3::get('APP_ROOT') . '/' . $location . '/' . $dir) && substr($dir,0,1)!=".") {
                 
                 // search for spouts
-                foreach(scandir($location . "/" . $dir) as $file) {
+                foreach(scandir(\F3::get('APP_ROOT') . '/' . $location . "/" . $dir) as $file) {
                     
                     // only scan visible .php files
-                    if(is_file($location . "/" . $dir . "/" . $file) && substr($file,0,1)!="." && strpos($file,".php")!==false) {
+                    if(is_file(\F3::get('APP_ROOT') . '/' . $location . "/" . $dir . "/" . $file) && substr($file,0,1)!="." && strpos($file,".php")!==false) {
                         
                         // create reflection class
                         $classname = $location."\\".$dir."\\".str_replace(".php","",$file);

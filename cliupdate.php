@@ -1,4 +1,5 @@
 <?php
+require('config.php');
 
 chdir(__DIR__);
 require(__DIR__.'/common.php');
