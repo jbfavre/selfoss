@@ -73,6 +73,14 @@ selfoss.shortcuts = {
             e.preventDefault();
             return false;
         });
+
+        // 'x': share/unshare
+        $(document).bind('keydown', 'x', function(e) {
+            selfoss.events.entriesToolbar($('.entry.selected'));
+            $('.entry.selected .entry-shared').click();
+            e.preventDefault();
+            return false;
+        });
         
         // 'm': mark/unmark
         $(document).bind('keydown', 'm', function(e) {
