@@ -48,6 +48,11 @@ foreach($this->spout->params as $spoutParamName => $spoutParam) {
                 <select name="'.$spoutParamName.'" size="1">'.$options.'
                 </select>
             </li>';
+    }else if ( $spoutParam["type"]=="multiline") {
+        echo '<li>
+		<label>'.$spoutParam['title'].':</label>
+		<textarea name="'.$spoutParamName.'">'.$value.'</textarea>
+            </li>';
     }
 }
 ?>
