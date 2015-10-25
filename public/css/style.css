@@ -652,6 +652,14 @@ body * {
         .entry-toolbar .entry-starr.active {
             background-image:url(images/starred.png);
         }
+
+        .entry-toolbar .entry-shared {
+            background-image:url(images/unshared.png);
+        }
+
+        .entry-toolbar .entry-shared.active {
+            background-image:url(images/shared.png);
+        }
         
         .entry-toolbar .entry-unread {
             background-image:url(images/read.png);
@@ -976,6 +984,7 @@ body.publicmode.authenabled.loggedin #nav-login,
 body.notloggedin #nav-mark,
 body.notloggedin #nav-settings,
 body.notloggedin .entry-starr,
+body.notloggedin .entry-shared,
 body.notloggedin .entry-unread {
     display:none;
 }

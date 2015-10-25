@@ -117,6 +117,16 @@ selfoss.events.entries = function() {
                 entryContent.lazyLoadImages();
             }
         }
+
+        // register open action for source scoring
+        var id = entryContent.parent().attr('id').substr(5);
+        $.ajax({
+                url: $('base').attr('href') + 'opened/' + id,
+                type: 'POST',
+                error: function(jqXHR, textStatus, errorThrown) {
+                    selfoss.showError('Can not mark item as opened: '+errorThrown);
+                }
+        });
     });
 
     // no source click

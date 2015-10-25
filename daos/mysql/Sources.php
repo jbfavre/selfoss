@@ -272,4 +272,35 @@ class Sources extends Database {
 
         return 0;
     }
+    
+    /**
+     * returns score of a source
+     *
+     * @param integer $id
+     * @return integer $score
+     */
+    public function getScore($id) {
+        $result = \F3::get('db')->exec('SELECT score FROM ' . \F3::get('db_prefix') . 'sources WHERE id=:id', [
+            ':id'  => $id
+        ]);
+        if ($result) {
+            return $result[0]['score'];
+        }
+
+        return 0;
+    }
+
+    /**
+     * set score of a source
+     *
+     * @param integer $id
+     * @param integer $score
+     * @return void
+     */
+    public function setScore( $id, $score) {
+        \F3::get('db')->exec('UPDATE ' . \F3::get('db_prefix') . 'sources SET score=:score WHERE id=:id', [
+            ':id'    => $id,
+            ':score' => $score
+        ]);
+    }
 }
