@@ -7,6 +7,10 @@ $lang = $f3->get('language');
 if($lang!='0' && $lang!='')
     $f3->set('LANGUAGE', $lang);
 
+// Load custom language
+$f3->set('LANGUAGE',$f3->get('language'));
+
+
 // init authentication
 $f3->set('auth', new \helpers\Authentication());
 
@@ -75,6 +79,9 @@ $f3->route('POST /mark',                'controllers\Items->mark');           //
 $f3->route('POST /unmark/@item',        'controllers\Items->unmark');         // json
 $f3->route('POST /starr/@item',         'controllers\Items->starr');          // json
 $f3->route('POST /unstarr/@item',       'controllers\Items->unstarr');        // json
+$f3->route('POST /opened/@item',        'controllers\Items->opened');         // json
+$f3->route('POST /shared/@item',        'controllers\Items->shared');         // json
+$f3->route('POST /unshared/@item',      'controllers\Items->shared');         // json
 
 $f3->route('GET    /source/params',     'controllers\Sources->params');       // html
 $f3->route('GET    /sources',           'controllers\Sources->show');         // html

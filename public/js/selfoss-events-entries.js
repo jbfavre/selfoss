@@ -104,7 +104,17 @@ selfoss.events.entries = function(e) {
             if(selfoss.isMobile()==false || $('#config').data('load_images_on_mobile')=="1") {
                 content.lazyLoadImages();
             }
-        } 
+        }
+
+        // register open action for source scoring
+        var id = content.parent().attr('id').substr(5);
+        $.ajax({
+                url: $('base').attr('href') + 'opened/' + id,
+                type: 'POST',
+                error: function(jqXHR, textStatus, errorThrown) {
+                    selfoss.showError('Can not mark item as opened: '+errorThrown);
+                }
+        });
     });
 
     // no source click
