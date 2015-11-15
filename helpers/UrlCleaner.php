@@ -49,21 +49,26 @@ class UrlCleaner {
 	$this->realUrl = $url;
 	$urlToken = parse_url($url);
 
-	// Look for host patterns. If found, use curl to get real URL
-        foreach ( $this->hostPatterns as $pattern ) {
-	    if ( strpos($urlToken['host'], $pattern) !== false ) {
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL,$url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
-		curl_setopt($ch, CURLOPT_HEADER, TRUE);
-		curl_exec($ch);
-		$this->realUrl = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
-		unset($ch);
-		break;
-	    }
+        if($urlToken['scheme'] != 'magnet') {
+	    // Look for host patterns. If found, use curl to get real URL
+            foreach ( $this->hostPatterns as $pattern ) {
+	        if ( strpos($urlToken['host'], $pattern) !== false ) {
+		    $ch = curl_init();
+		    curl_setopt($ch, CURLOPT_URL,$url);
+		    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+		    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+		    curl_setopt($ch, CURLOPT_HEADER, TRUE);
+                    curl_setopt($ch, CURLOPT_COOKIEFILE, '/tmp/cookie.txt');
+                    curl_setopt($ch, CURLOPT_COOKIEJAR, '/tmp/cookie.txt');
+		    curl_exec($ch);
+		    $this->realUrl = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
+                    unset($ch);
+		    if (file_exists('/tmp/cookie.txt')) { unlink('/tmp/cookie.txt'); }
+		    break;
+	        }
+            }
+	    $this->cleanTrackers();
 	}
-	$this->cleanTrackers();
 	return true;
     }
 
