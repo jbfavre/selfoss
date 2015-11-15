@@ -255,11 +255,19 @@ class Items extends Database {
         if(isset($options['tag']) && strlen($options['tag'])>0) {
             $params[':tag'] = array( "%,".$options['tag'].",%" , \PDO::PARAM_STR );
             if ( \F3::get( 'db_type' ) == 'mysql' ) {
-              $where .= " AND ( CONCAT( ',' , sources.tags , ',' ) LIKE _utf8 :tag COLLATE utf8_bin ) ";
+              $source_tags_where = " WHERE ( CONCAT( ',' , sources.tags , ',' ) LIKE _utf8 :tag COLLATE utf8_bin ) ";
             } else {
-              $where .= " AND ( (',' || sources.tags || ',') LIKE :tag ) ";
+              $source_tags_where = " WHERE ( (',' || sources.tags || ',') LIKE :tag ) ";
             }
+            // Get source's id containing tag
+            $resultset = \F3::get('db')->exec('SELECT id FROM sources'.$source_tags_where, $params);
+            // Build source ids list
+            $source_list = array();
+            foreach ($resultset as $source)
+                $sources_list[] = $source['id'];
+            $where .= " AND source in (".implode(',',$sources_list).")";
         }
+
         // source filter
         elseif(isset($options['source']) && strlen($options['source'])>0) {
             $params[':source'] = array($options['source'], \PDO::PARAM_INT);
