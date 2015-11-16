@@ -79,9 +79,11 @@ selfoss.events.entriesToolbar = function(parent) {
                 if(starr) {
                     button.addClass('active');
                     button.html($('#lang').data('unstar'));
+                    parent.addClass('starred');
                 } else {
                     button.removeClass('active');
                     button.html($('#lang').data('star'));
+                    parent.removeClass('starred');
                 }
             };
             setButton(starr);
