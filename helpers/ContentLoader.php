@@ -43,9 +43,80 @@ class ContentLoader {
     public function update() {
         $sourcesDao = new \daos\Sources();
         foreach($sourcesDao->getByLastUpdate() as $source) {
+            $this->score($source);
             $this->fetch($source);
         }
         $this->cleanup();
+    }
+
+    /**
+     * updates given source score
+     * returns an error or true on success
+     *
+     * @return void
+     * @param mixed $source the current source
+     */
+    public function score($source) {
+        return true;
+        /*
+         * Get all items which lastupdate is greater than source's one
+         * Means they were updated after source was
+         *
+         * Compute items score
+         *
+         *     itemsscore = SUM( (opened + starred + shared) / 3 ) / itemsnumber * 100
+         *
+         * Average of item's average score of actions
+         *
+         *     0 <= itemsscore <= 100
+         */
+        $this->itemsListDao = new \daos\Items();
+        $itemsRating = 0;
+        $itemCount = 0;
+        $voteCount = 0;
+        foreach ($itemsListDao->getForScore($source['id'], $source['lastupdate']) as $item) {
+            $itemsRating += ( ( $item['opened'] * 1 ) +
+                              ( $item['shared'] * 2 ) +
+                              ( $item['starred']  * 4 )
+                            );
+            $itemCount++;
+            $voteCount += $item['opened'] + $item['shared'] + $item['starred'];
+        }
+        $itemsAvgScore = $itemRating / $ItemCount;
+        $avg_rating = ( $voteCount ) ? ( $itemRating / $voteCount ) : 0;
+        $weight = 1.05 + ($voteCount / ($itemCount * 7));
+        $rating_change = ( $weight * $avg_rating ) + ( 1 - $weight ) * $source['score'];
+
+        $alpha = 1-EXP(-(3600/(60*60)));
+        $new_score = (
+          $alpha * ($source['score'] + $new_score) +
+          ( (1 - $alpha) * $source['score'] )
+        );
+        $normalized_score = (
+          $new_score - $min
+        );
+
+        /*
+         * Compute source score with exponential moving average (EMA)
+         *
+         *    newscore = alpha * itemsscore + (1- alpha) * oldscore
+         *
+         * alpha is a config option. Default will be 0.63
+         *
+         *    alpha = 1 - exp( - ( deltat / (W * 60) )
+         *
+         * It comes from the way Linux kernel compute load average:
+         *
+         *    deltat = time for reading in second
+         *    W = period of time in minutes over which average is done
+         *
+         * If you update RSS feeds each hours, deltat = 3600 and W = 60
+         *
+         *    alpha = 1 - exp( - ( 3600 / (60 * 60) ) = 0.63
+         */
+         $oldSourceScore = $source['score'];
+         //$alpha = \F3::
+
     }
 
     /**
