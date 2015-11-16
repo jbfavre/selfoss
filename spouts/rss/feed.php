@@ -274,8 +274,7 @@ class feed extends \spouts\spout {
      */
     public function getLink() {
         if($this->items!==false && $this->valid()) {
-            $link = @current($this->items)->get_link();
-            return $link;
+	    return @current($this->items)->get_link();
         }
         return false;
     }

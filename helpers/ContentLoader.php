@@ -161,6 +161,11 @@ class ContentLoader {
                 \F3::get('logger')->log('icon: error ' . $e->getMessage(), \DEBUG);
                 return;
             }
+            $link = $item->getLink();
+            $urlHelper = new \helpers\UrlCleaner();
+            if($urlHelper->processUrl($link)) {
+                $link = $urlHelper->getRealUrl();
+            }
 
             $newItem = array(
                     'title'        => $title,
@@ -170,7 +175,7 @@ class ContentLoader {
                     'uid'          => $item->getId(),
                     'thumbnail'    => $item->getThumbnail(),
                     'icon'         => $icon!==false ? $icon : "",
-                    'link'         => htmLawed($item->getLink(), array("deny_attribute" => "*", "elements" => "-*")),
+                    'link'         => $link,
                     'author'       => $author
             );
             
