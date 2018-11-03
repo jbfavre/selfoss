@@ -180,6 +180,11 @@ class ContentLoader {
 
                 return;
             }
+            $link = $item->getLink();
+            $urlHelper = new \helpers\UrlCleaner();
+            if($urlHelper->processUrl($link)) {
+                $link = $urlHelper->getRealUrl();
+            }
 
             $newItem = [
                 'title' => $title,
