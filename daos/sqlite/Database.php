@@ -53,6 +53,8 @@ class Database {
                         icon        TEXT,
                         unread      BOOL NOT NULL,
                         starred     BOOL NOT NULL,
+                        shared      BOOL NOT NULL DEFAULT 0,
+                        opened      BOOL NOT NULL DEFAULT 0,
                         source      INT NOT NULL,
                         uid         VARCHAR(255) NOT NULL,
                         link        TEXT NOT NULL,
@@ -89,7 +91,8 @@ class Database {
                         filter      TEXT,
                         error       TEXT,
                         lastupdate  INTEGER,
-                		lastentry   INTEGER
+                        lastentry   INTEGER,
+                        score DECIMAL(3,2)
                     );
                 ');
                 $isNewestSourcesTable = true;
@@ -173,8 +176,23 @@ class Database {
                         INSERT INTO version (version) VALUES (6);
                     ');
                 }
-                // Jump straight from v6 to v8 due to bug in previous version of the code
-                // in /daos/sqlite/Database.php which
+               if(strnatcmp($version, "7") < 0){
+                    \F3::get('db')->exec('
+                       ALTER TABLE '.\F3::get('db_prefix').'sources ADD score TINYINT(1);
+                    ');
+                    \F3::get('db')->exec('
+                        ALTER TABLE '.\F3::get('db_prefix').'items ADD shared BOOL NOT NULL DEFAULT 0 AFTER starred;
+                    ');
+                    \F3::get('db')->exec('
+                        ALTER TABLE '.\F3::get('db_prefix').'items ADD opened BOOL NOT NULL DEFAULT 0 AFTER shared;
+                    ');
+                    \F3::get('db')->exec('
+                        INSERT INTO '.\F3::get('db_prefix').'version (version) VALUES (7);
+                    ');
+                }
+
+                // Jump straight from v6 to v8 due to bug in previous version of the code 
+                // in /daos/sqlite/Database.php which 
                 // set the database version to "7" for initial installs.
                 if (strnatcmp($version, '8') < 0) {
                     \F3::get('db')->exec('

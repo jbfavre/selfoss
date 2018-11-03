@@ -212,4 +212,68 @@ class Items extends BaseController {
 
         $this->view->jsonSuccess($sync);
     }
+
+    /**
+     * mark item as shared
+     * json
+     *
+     * @return void
+     */
+    public function shared() {
+        $this->needsLoggedIn();
+
+        $id = \F3::get('PARAMS["item"]');
+
+        $itemDao = new \daos\Items();
+
+        if (!$itemDao->isValid('id', $id))
+            $this->view->error('invalid id');
+
+        $itemDao->shared($id);
+        $this->view->jsonSuccess(array(
+            'success' => true
+        ));
+    }
+
+    /**
+     * unshare item
+     * json
+     *
+     * @return void
+     */
+    public function unshared() {
+        $this->needsLoggedIn();
+
+        $id = \F3::get('PARAMS["item"]');
+
+        $itemDao = new \daos\Items();
+
+        if (!$itemDao->isValid('id', $id))
+            $this->view->error('invalid id');
+
+        $itemDao->unshared($id);
+        $this->view->jsonSuccess(array(
+            'success' => true
+        ));
+    }
+
+    /**
+     * mark item as opened
+     * json
+     *
+     * @return void
+     */
+    public function opened() {
+        $id = \F3::get('PARAMS["item"]');
+
+        $itemDao = new \daos\Items();
+
+        if (!$itemDao->isValid('id', $id))
+            $this->view->error('invalid id');
+
+        $itemDao->opened($id);
+        $this->view->jsonSuccess(array(
+            'success' => true
+        ));
+    }
 }

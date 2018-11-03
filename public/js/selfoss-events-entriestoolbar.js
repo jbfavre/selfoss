@@ -106,6 +106,40 @@ selfoss.events.entriesToolbar = function(parent) {
             return false;
         });
 
+        // shared/unshared
+        parent.find('.entry-shared').unbind('click').click(function() {
+            var parent = $(this).parents('.entry');
+            var id = parent.attr('id').substr(5);
+            var shared = $(this).hasClass('active')==false;
+            var button = $("#entry"+id+" .entry-shared, #entrr"+id+" .entry-shared");
+
+            // update button
+            var setButton = function(shared) {
+                if(shared) {
+                    button.addClass('active');
+                    button.html($('#lang').data('unshare'));
+                } else {
+                    button.removeClass('active');
+                    button.html($('#lang').data('share'));
+                }
+            };
+            setButton(shared);
+
+            $.ajax({
+                url: $('base').attr('href') + (shared ? 'shared/' : 'unshared/') + id,
+                data: { ajax: true },
+                type: 'POST',
+                error: function(jqXHR, textStatus, errorThrown) {
+                    // rollback ui changes
+                    setButton(!shared);
+                    selfoss.showError('Can not share/unshare item: '+
+                                      textStatus+' '+errorThrown);
+                }
+            });
+
+            return false;
+        });
+
         // read/unread
         parent.find('.entry-unread').unbind('click').click(function() {
             var entry = $(this).parents('.entry');
