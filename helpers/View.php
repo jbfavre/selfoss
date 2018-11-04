@@ -189,7 +189,7 @@ class View {
         } elseif ($type == self::STATIC_RESOURCE_CSS) {
             $filename = self::getGlobalCssFileName();
         }
-        $target = \F3::get('BASEDIR') . '/public/' . self::$staticPrefix . '.' . $type;
+        $target = \F3::get('WEBDIR') . '/public/' . self::$staticPrefix . '.' . $type;
 
         // build if needed
         if (!file_exists($target) || filemtime($target) < self::$staticmtime[$type]) {

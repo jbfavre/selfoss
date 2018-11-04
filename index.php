@@ -23,7 +23,7 @@ $f3->set('js', $js);
 
 // define css files
 $css = $clientPackage->extra->requiredFiles->css;
-if (file_exists('user.css')) {
+if (file_exists(\F3::get('BASEDIR') . 'user.css')) {
     $css[] = 'user.css';
 }
 $f3->set('css', $css);
